@@ -311,6 +311,16 @@ select:focus {
   background: #ffffff;
 }
 
+.app-credit {
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  text-align: center;
+  color: var(--accent-dark);
+  font-size: 1rem;
+  font-weight: 850;
+}
+
 @media (max-width: 720px) {
   .app-shell {
     padding: 12px;

@@ -379,7 +379,15 @@ function downloadReport() {
     th { background: #e8f3ef; }
     .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
     .box { border: 1px solid #dce3df; padding: 14px; }
-    .footer { margin-top: 28px; color: #63706b; font-weight: 700; }
+    .footer {
+      margin-top: 28px;
+      border-top: 2px solid #e8f3ef;
+      padding-top: 18px;
+      color: #155f54;
+      font-size: 20px;
+      font-weight: 800;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -395,7 +403,7 @@ function downloadReport() {
     <thead><tr><th>Semester</th><th>SGPA</th><th>Credits</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>
-  <p class="footer">Made by Aditya.B</p>
+  <p class="footer">Made by Aditya B ❤️</p>
 </body>
 </html>`;
 
