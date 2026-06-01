@@ -1,16 +1,18 @@
 :root {
   color-scheme: light;
-  --bg: #e7eae1;
-  --panel: #ffffff;
+  --bg: #eef3ee;
+  --panel: rgba(255, 255, 255, 0.86);
   --ink: #1c2321;
   --muted: #63706b;
-  --line: #dce3df;
-  --accent: #268a7a;
+  --line: rgba(120, 154, 145, 0.28);
+  --accent: #13a38f;
   --accent-dark: #155f54;
-  --amber: #f1a43c;
+  --amber: #f1b444;
   --danger: #c84f4f;
-  --soft: #e8f3ef;
-  --shadow: 0 22px 60px rgba(28, 35, 33, 0.12);
+  --soft: rgba(232, 248, 242, 0.9);
+  --electric: #57d6ff;
+  --shadow: 0 28px 80px rgba(18, 44, 38, 0.16);
+  --glow: 0 0 0 1px rgba(19, 163, 143, 0.18), 0 20px 54px rgba(19, 163, 143, 0.2);
 }
 
 * {
@@ -22,10 +24,36 @@ body {
   min-height: 100vh;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
+  position: relative;
+  overflow-x: hidden;
   background:
-    linear-gradient(120deg, rgba(34, 124, 109, 0.12), transparent 34%),
-    linear-gradient(260deg, rgba(241, 164, 60, 0.18), transparent 38%),
+    radial-gradient(circle at 18% 12%, rgba(87, 214, 255, 0.22), transparent 28%),
+    radial-gradient(circle at 84% 8%, rgba(19, 163, 143, 0.2), transparent 30%),
+    linear-gradient(120deg, rgba(19, 163, 143, 0.12), transparent 34%),
+    linear-gradient(260deg, rgba(241, 180, 68, 0.16), transparent 38%),
     var(--bg);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(rgba(19, 163, 143, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(19, 163, 143, 0.12) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), transparent 82%);
+  animation: gridDrift 18s linear infinite;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.42));
 }
 
 button,
@@ -46,10 +74,25 @@ select {
 .calculator-panel {
   width: 100%;
   background: var(--panel);
-  border: 1px solid rgba(28, 35, 33, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.68);
   border-radius: 8px;
   box-shadow: var(--shadow);
   padding: 28px;
+  backdrop-filter: blur(18px);
+  position: relative;
+  overflow: hidden;
+}
+
+.calculator-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, transparent, rgba(87, 214, 255, 0.18), transparent),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 22%);
+  opacity: 0.9;
 }
 
 .panel-header,
@@ -61,6 +104,18 @@ select {
   justify-content: space-between;
   gap: 18px;
   align-items: flex-start;
+}
+
+.panel-header,
+.settings-panel,
+.summary-grid,
+.semester-toolbar,
+.semester-grid,
+.predictor,
+.chart-section,
+.app-credit {
+  position: relative;
+  z-index: 1;
 }
 
 .header-actions {
@@ -88,9 +143,10 @@ p {
 
 h1 {
   margin-bottom: 0;
-  font-size: clamp(2rem, 5vw, 4.1rem);
+  font-size: 4rem;
   line-height: 1;
   letter-spacing: 0;
+  text-shadow: 0 0 28px rgba(19, 163, 143, 0.24);
 }
 
 h2 {
@@ -104,13 +160,14 @@ p {
 
 .scale-badge {
   min-width: 96px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(19, 163, 143, 0.26);
   border-radius: 999px;
   padding: 10px 14px;
   text-align: center;
   color: var(--accent-dark);
-  background: var(--soft);
+  background: linear-gradient(135deg, rgba(232, 248, 242, 0.96), rgba(255, 255, 255, 0.82));
   font-weight: 800;
+  box-shadow: 0 0 24px rgba(19, 163, 143, 0.16);
 }
 
 .summary-grid {
@@ -125,7 +182,8 @@ p {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 18px;
-  background: #fbfcfb;
+  background: rgba(251, 252, 251, 0.74);
+  box-shadow: 0 18px 40px rgba(18, 44, 38, 0.08);
 }
 
 .settings-controls {
@@ -142,7 +200,18 @@ p {
   padding: 18px;
   display: grid;
   align-content: space-between;
-  background: #fbfcfb;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(235, 250, 245, 0.72)),
+    #fbfcfb;
+  box-shadow: 0 14px 32px rgba(18, 44, 38, 0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.summary-card:hover,
+.plan-item:hover {
+  border-color: rgba(19, 163, 143, 0.45);
+  box-shadow: var(--glow);
+  transform: translateY(-2px);
 }
 
 .summary-card span {
@@ -153,22 +222,27 @@ p {
 .summary-card strong {
   font-size: 2.1rem;
   line-height: 1;
+  color: var(--accent-dark);
 }
 
 .ghost-button {
   min-height: 42px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(19, 163, 143, 0.28);
   border-radius: 8px;
   padding: 0 16px;
-  background: #ffffff;
+  background: linear-gradient(135deg, #ffffff, rgba(232, 248, 242, 0.92));
   color: var(--ink);
   cursor: pointer;
   font-weight: 750;
+  box-shadow: 0 10px 24px rgba(18, 44, 38, 0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
 .ghost-button:hover {
   border-color: var(--accent);
   color: var(--accent-dark);
+  box-shadow: 0 0 0 3px rgba(19, 163, 143, 0.14), 0 16px 34px rgba(19, 163, 143, 0.18);
+  transform: translateY(-1px);
 }
 
 .semester-grid {
@@ -193,7 +267,7 @@ p {
   padding: 0 14px;
   display: flex;
   align-items: center;
-  background: #fbfcfb;
+  background: rgba(251, 252, 251, 0.8);
   font-weight: 800;
 }
 
@@ -213,14 +287,16 @@ select {
   border-radius: 8px;
   padding: 0 12px;
   color: var(--ink);
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.9);
   outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
 input:focus,
 select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(34, 124, 109, 0.16);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(19, 163, 143, 0.16), 0 0 28px rgba(87, 214, 255, 0.18);
 }
 
 .predictor {
@@ -243,9 +319,13 @@ select:focus {
   margin-top: 16px;
   border-radius: 8px;
   padding: 16px;
-  background: var(--soft);
+  border: 1px solid rgba(19, 163, 143, 0.24);
+  background:
+    linear-gradient(135deg, rgba(232, 248, 242, 0.96), rgba(255, 255, 255, 0.78)),
+    var(--soft);
   color: var(--accent-dark);
   font-weight: 800;
+  box-shadow: 0 12px 30px rgba(19, 163, 143, 0.1);
 }
 
 .prediction-result.warning {
@@ -278,7 +358,8 @@ select:focus {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 12px;
-  background: #fbfcfb;
+  background: rgba(251, 252, 251, 0.84);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
 .plan-item span {
@@ -306,9 +387,12 @@ select:focus {
   width: 100%;
   height: auto;
   min-height: 240px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(19, 163, 143, 0.28);
   border-radius: 8px;
-  background: #ffffff;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(236, 250, 246, 0.8)),
+    #ffffff;
+  box-shadow: inset 0 0 28px rgba(19, 163, 143, 0.08), 0 18px 40px rgba(18, 44, 38, 0.08);
 }
 
 .app-credit {
@@ -319,6 +403,28 @@ select:focus {
   color: var(--accent-dark);
   font-size: 1rem;
   font-weight: 850;
+  text-shadow: 0 0 18px rgba(19, 163, 143, 0.28);
+}
+
+@keyframes gridDrift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+
+  to {
+    background-position: 44px 44px, 44px 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @media (max-width: 720px) {
@@ -329,6 +435,10 @@ select:focus {
 
   .calculator-panel {
     padding: 18px;
+  }
+
+  h1 {
+    font-size: 2.35rem;
   }
 
   .panel-header,
