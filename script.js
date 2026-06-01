@@ -21,6 +21,11 @@ const defaultCreditsPerSemester = 20;
 let semesterCount = 8;
 let lastResult = null;
 
+window.addEventListener("pointermove", (event) => {
+  document.documentElement.style.setProperty("--cursor-x", `${event.clientX}px`);
+  document.documentElement.style.setProperty("--cursor-y", `${event.clientY}px`);
+});
+
 function formatNumber(value, digits = 2) {
   return Number.isFinite(value) ? value.toFixed(digits) : "0.00";
 }

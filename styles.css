@@ -1,5 +1,7 @@
 :root {
   color-scheme: light;
+  --cursor-x: 50vw;
+  --cursor-y: 22vh;
   --bg: #eef3ee;
   --panel: rgba(255, 255, 255, 0.86);
   --ink: #1c2321;
@@ -40,6 +42,7 @@ body::before {
   inset: 0;
   z-index: -2;
   background-image:
+    radial-gradient(circle 190px at var(--cursor-x) var(--cursor-y), rgba(87, 214, 255, 0.42), transparent 72%),
     linear-gradient(rgba(19, 163, 143, 0.12) 1px, transparent 1px),
     linear-gradient(90deg, rgba(19, 163, 143, 0.12) 1px, transparent 1px);
   background-size: 44px 44px;
@@ -53,7 +56,12 @@ body::after {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.42));
+  background:
+    radial-gradient(circle 280px at var(--cursor-x) var(--cursor-y), rgba(19, 163, 143, 0.34), transparent 70%),
+    linear-gradient(115deg, transparent 0 42%, rgba(255, 255, 255, 0.62) 48%, transparent 54% 100%),
+    linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.42));
+  animation: sweepBeam 5.5s ease-in-out infinite;
+  mix-blend-mode: screen;
 }
 
 button,
@@ -81,6 +89,13 @@ select {
   backdrop-filter: blur(18px);
   position: relative;
   overflow: hidden;
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.calculator-panel:hover {
+  border-color: rgba(87, 214, 255, 0.48);
+  box-shadow: var(--shadow), 0 0 44px rgba(87, 214, 255, 0.22), 0 0 80px rgba(19, 163, 143, 0.18);
+  transform: translateY(-4px);
 }
 
 .calculator-panel::before {
@@ -93,6 +108,25 @@ select {
     linear-gradient(90deg, transparent, rgba(87, 214, 255, 0.18), transparent),
     linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 22%);
   opacity: 0.9;
+  transform: translateX(-45%);
+  animation: panelScan 4.6s ease-in-out infinite;
+}
+
+.calculator-panel::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, transparent 0 28%, rgba(87, 214, 255, 0.34) 42%, transparent 58% 100%),
+    repeating-linear-gradient(0deg, rgba(19, 163, 143, 0.08) 0 1px, transparent 1px 8px);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.calculator-panel:hover::after {
+  opacity: 1;
 }
 
 .panel-header,
@@ -210,8 +244,8 @@ p {
 .summary-card:hover,
 .plan-item:hover {
   border-color: rgba(19, 163, 143, 0.45);
-  box-shadow: var(--glow);
-  transform: translateY(-2px);
+  box-shadow: var(--glow), 0 0 34px rgba(87, 214, 255, 0.16);
+  transform: translateY(-4px) scale(1.015);
 }
 
 .summary-card span {
@@ -241,8 +275,8 @@ p {
 .ghost-button:hover {
   border-color: var(--accent);
   color: var(--accent-dark);
-  box-shadow: 0 0 0 3px rgba(19, 163, 143, 0.14), 0 16px 34px rgba(19, 163, 143, 0.18);
-  transform: translateY(-1px);
+  box-shadow: 0 0 0 3px rgba(19, 163, 143, 0.14), 0 16px 34px rgba(19, 163, 143, 0.18), 0 0 28px rgba(87, 214, 255, 0.28);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .semester-grid {
@@ -393,6 +427,12 @@ select:focus {
     linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(236, 250, 246, 0.8)),
     #ffffff;
   box-shadow: inset 0 0 28px rgba(19, 163, 143, 0.08), 0 18px 40px rgba(18, 44, 38, 0.08);
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+#resultChart:hover {
+  box-shadow: inset 0 0 34px rgba(19, 163, 143, 0.14), 0 0 48px rgba(87, 214, 255, 0.22);
+  transform: translateY(-2px);
 }
 
 .app-credit {
@@ -413,6 +453,28 @@ select:focus {
 
   to {
     background-position: 44px 44px, 44px 44px;
+  }
+}
+
+@keyframes sweepBeam {
+  0%,
+  100% {
+    background-position: 0 0, -220px 0, 0 0;
+  }
+
+  50% {
+    background-position: 0 0, 220px 0, 0 0;
+  }
+}
+
+@keyframes panelScan {
+  0%,
+  100% {
+    transform: translateX(-45%);
+  }
+
+  50% {
+    transform: translateX(45%);
   }
 }
 
