@@ -243,8 +243,8 @@ p {
 
 .summary-card:hover,
 .plan-item:hover {
-  border-color: rgba(19, 163, 143, 0.45);
-  box-shadow: var(--glow), 0 0 34px rgba(87, 214, 255, 0.16);
+  border-color: rgba(132, 30, 200, 0.45);
+  box-shadow: var(--glow), 0 0 34px rgba(10, 140, 188, 0.16);
   transform: translateY(-4px) scale(1.015);
 }
 
