@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CGPA Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="calculator-panel" aria-labelledby="app-title">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Student Toolkit</p>
+            <h1 id="app-title">CGPA Calculator</h1>
+          </div>
+          <div class="header-actions">
+            <button class="ghost-button" id="downloadReportButton" type="button">Download Report</button>
+            <div class="scale-badge" aria-label="Ten point scale">10.0 Scale</div>
+          </div>
+        </div>
+
+        <section class="settings-panel" aria-labelledby="settings-title">
+          <div>
+            <h2 id="settings-title">Course Setup</h2>
+            <p>Choose your course length and the app will save your data automatically.</p>
+          </div>
+          <div class="settings-controls">
+            <label>
+              <span>Course Type</span>
+              <select id="courseType">
+                <option value="4">2 years</option>
+                <option value="6">3 years</option>
+                <option value="8" selected>4 years</option>
+                <option value="custom">Custom</option>
+              </select>
+            </label>
+            <label>
+              <span>Total Semesters</span>
+              <input id="semesterCountInput" type="number" min="1" max="12" step="1" value="8" />
+            </label>
+          </div>
+        </section>
+
+        <div class="summary-grid" aria-live="polite">
+          <article class="summary-card">
+            <span>Current CGPA</span>
+            <strong id="currentCgpa">0.00</strong>
+          </article>
+          <article class="summary-card">
+            <span>Completed Credits</span>
+            <strong id="completedCredits">0</strong>
+          </article>
+          <article class="summary-card">
+            <span>Completed Semesters</span>
+            <strong id="completedSemesters">0</strong>
+          </article>
+        </div>
+
+        <div class="semester-toolbar">
+          <div>
+            <h2>Semester Scores</h2>
+            <p id="semesterHelp">Enter SGPA and credits for your semesters.</p>
+          </div>
+          <button class="ghost-button" id="resetButton" type="button" aria-label="Reset all values">
+            Reset
+          </button>
+        </div>
+
+        <form id="cgpaForm" class="semester-grid">
+          <div class="grid-heading">Semester</div>
+          <div class="grid-heading">SGPA</div>
+          <div class="grid-heading">Credits</div>
+        </form>
+
+        <section class="predictor" aria-labelledby="predictor-title">
+          <div>
+            <h2 id="predictor-title">Target Predictor</h2>
+            <p>Find the average SGPA needed in your remaining semesters.</p>
+          </div>
+
+          <div class="predictor-controls">
+            <label>
+              <span>Target CGPA</span>
+              <input id="targetCgpa" type="number" min="0" max="10" step="0.01" value="8.50" />
+            </label>
+            <label>
+              <span>Total Credits</span>
+              <input id="totalCredits" type="number" min="1" step="1" placeholder="Auto" />
+            </label>
+          </div>
+
+          <div id="predictionResult" class="prediction-result">
+            Add semester details to calculate your required SGPA.
+          </div>
+
+          <div class="target-plan">
+            <h3>Semester Target Plan</h3>
+            <div id="targetPlanList" class="target-plan-list"></div>
+          </div>
+        </section>
+
+        <section class="chart-section" aria-labelledby="chart-title">
+          <div>
+            <h2 id="chart-title">Result Chart</h2>
+            <p>Track SGPA and CGPA progress semester by semester.</p>
+          </div>
+          <canvas id="resultChart" width="1000" height="360" aria-label="SGPA and CGPA chart"></canvas>
+        </section>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
