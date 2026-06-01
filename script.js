@@ -380,12 +380,12 @@ function downloadReport() {
     .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
     .box { border: 1px solid #dce3df; padding: 14px; }
     .footer {
-      margin-top: 28px;
-      border-top: 2px solid #e8f3ef;
-      padding-top: 18px;
+      margin-top: 22px;
+      border-top: 1px solid #e8f3ef;
+      padding-top: 12px;
       color: #155f54;
-      font-size: 20px;
-      font-weight: 800;
+      font-size: 13px;
+      font-weight: 700;
       text-align: center;
     }
   </style>
