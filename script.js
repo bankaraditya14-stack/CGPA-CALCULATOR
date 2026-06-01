@@ -10,6 +10,7 @@ const resetButton = document.querySelector("#resetButton");
 const downloadReportButton = document.querySelector("#downloadReportButton");
 const courseTypeSelect = document.querySelector("#courseType");
 const semesterCountInput = document.querySelector("#semesterCountInput");
+const reportNameInput = document.querySelector("#reportName");
 const semesterHelp = document.querySelector("#semesterHelp");
 const resultChart = document.querySelector("#resultChart");
 const chartContext = resultChart.getContext("2d");
@@ -42,6 +43,7 @@ function saveData() {
     semesterCount,
     targetCgpa: targetCgpaInput.value,
     totalCredits: totalCreditsInput.value,
+    reportName: reportNameInput.value,
     semesters: semesters.map((semester) => ({
       sgpa: semester.sgpaValue,
       credits: semester.creditsValue,
@@ -317,26 +319,47 @@ function setSemesterCount(nextCount, savedSemesters = readSemesterData({ include
 
 function resetCalculator() {
   localStorage.removeItem(storageKey);
+  reportNameInput.value = "";
   targetCgpaInput.value = "8.50";
   totalCreditsInput.value = "";
   courseTypeSelect.value = "8";
   setSemesterCount(8, []);
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function createReportFileName(reportName) {
+  const cleanName = reportName
+    .trim()
+    .replace(/[^a-z0-9]+/gi, "-")
+    .replace(/^-+|-+$/g, "")
+    .toLowerCase();
+  const dateStamp = new Date().toISOString().slice(0, 10);
+  return `${cleanName || "cgpa-report"}-${dateStamp}.html`;
+}
+
 function downloadReport() {
   const result = lastResult || getCalculationResult();
   const target = targetCgpaInput.value || "Not set";
+  const reportName = reportNameInput.value.trim() || "CGPA Report";
   const rows = result.semesters
     .map(
       (semester) =>
-        `<tr><td>Semester ${semester.semester}</td><td>${semester.sgpaValue || "-"}</td><td>${semester.creditsValue || defaultCreditsPerSemester}</td></tr>`
+        `<tr><td>Semester ${semester.semester}</td><td>${escapeHtml(semester.sgpaValue || "-")}</td><td>${escapeHtml(semester.creditsValue || defaultCreditsPerSemester)}</td></tr>`
     )
     .join("");
   const report = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>CGPA Report</title>
+  <title>${escapeHtml(reportName)}</title>
   <style>
     body { font-family: Arial, sans-serif; color: #1c2321; margin: 32px; }
     h1 { margin-bottom: 4px; }
@@ -348,12 +371,12 @@ function downloadReport() {
   </style>
 </head>
 <body>
-  <h1>CGPA Report</h1>
+  <h1>${escapeHtml(reportName)}</h1>
   <p>Generated from CGPA Calculator</p>
   <div class="summary">
     <div class="box"><strong>Current CGPA</strong><br>${formatNumber(result.currentCgpa)}</div>
     <div class="box"><strong>Completed Credits</strong><br>${formatCredits(result.completedCredits)}</div>
-    <div class="box"><strong>Target CGPA</strong><br>${target}</div>
+    <div class="box"><strong>Target CGPA</strong><br>${escapeHtml(target)}</div>
   </div>
   <p>Total semesters: ${semesterCount} | Estimated total credits: ${formatCredits(result.totalCredits)}</p>
   <table>
@@ -367,7 +390,7 @@ function downloadReport() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "cgpa-report.html";
+  link.download = createReportFileName(reportName);
   link.click();
   URL.revokeObjectURL(url);
 }
@@ -378,6 +401,7 @@ function loadInitialState() {
   courseTypeSelect.value = savedData.courseType || (["4", "6", "8"].includes(String(savedCount)) ? String(savedCount) : "custom");
   semesterCount = Math.min(Math.max(Number(savedCount) || 8, 1), 12);
   semesterCountInput.value = String(semesterCount);
+  reportNameInput.value = savedData.reportName || "";
   targetCgpaInput.value = savedData.targetCgpa || "8.50";
   totalCreditsInput.value = savedData.totalCredits || "";
   renderSemesterRows(savedData.semesters || []);
@@ -387,6 +411,7 @@ function loadInitialState() {
 form.addEventListener("input", calculate);
 targetCgpaInput.addEventListener("input", calculate);
 totalCreditsInput.addEventListener("input", calculate);
+reportNameInput.addEventListener("input", calculate);
 resetButton.addEventListener("click", resetCalculator);
 downloadReportButton.addEventListener("click", downloadReport);
 
